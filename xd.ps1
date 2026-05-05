@@ -30,9 +30,21 @@ function Abrir-Rick($cantidad) {
 # Configuración inicial (7 ventanas)
 Abrir-Rick 7
 
-$screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+try {
+    Add-Type -AssemblyName System.Windows.Forms
+    $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+    $screenWidth = if ($screen.Width -gt 0) { $screen.Width } else { 1920 }
+    $screenHeight = if ($screen.Height -gt 0) { $screen.Height } else { 1080 }
+} catch {
+    # Valores por defecto si falla la detección (Full HD estándar)
+    $screenWidth = 1920
+    $screenHeight = 1080
+}
+
 $w = 450 
 $h = 350 
+
+
 
 Write-Host "MODO HYDRA ACTIVADO: Si cierras una, nacen dos." -ForegroundColor Red -BackgroundColor Black
 
@@ -54,6 +66,9 @@ while($true) {
         $WinAPI::ShowWindow($handle, 1)
         $posX = Get-Random -Minimum 450 -Maximum ($screen.Width - $w)
         $posY = Get-Random -Minimum 350 -Maximum ($screen.Height - $h)
+        # Asegurarse de que el máximo siempre sea mayor que el mínimo para Get-Random
+        $maxPosX = if ($screenWidth -gt $w) { $screenWidth - $w } else { 100 }
+        $maxPosY = if ($screenHeight -gt $h) { $screenHeight - $h } else { 100 }
         $WinAPI::SetWindowPos($handle, [IntPtr]::Zero, $posX, $posY, $w, $h, 0x0040)
     }
     
