@@ -52,8 +52,8 @@ while($true) {
 
         # Movimiento aleatorio
         $WinAPI::ShowWindow($handle, 1)
-        $posX = Get-Random -Minimum 450 -Maximum ($screen.Width - $w)
-        $posY = Get-Random -Minimum 350 -Maximum ($screen.Height - $h)
+        $posX = Get-Random -Minimum 0 -Maximum ($screen.Width - $w)
+        $posY = Get-Random -Minimum 0 -Maximum ($screen.Height - $h)
         $WinAPI::SetWindowPos($handle, [IntPtr]::Zero, $posX, $posY, $w, $h, 0x0040)
     }
     
